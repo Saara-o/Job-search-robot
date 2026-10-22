@@ -5,6 +5,7 @@ def getDataFromTyomarkkinatori():
   blockCookies()
   makeSearch("python")
   selectLocation(["Helsinki", "Espoo"])
+  collectCardsData()
 
 
 
@@ -28,7 +29,26 @@ def selectLocation(locationList):
   kentta = page.get_by_role("combobox", name="Sijainti")
 
   for location in locationList:
-      kentta.fill(location)
-      kentta.press("Enter")
-      kentta.fill("")
+    kentta.fill(location)
+    kentta.press("Enter")
+    kentta.fill("")
+
+
+def collectCardsData():
+  page = browser.page()
+  cards = page.locator("#tmt-haku-search-results-scroll-anchor > div").all()
+
+  jobs = []
+  for card in cards[1:-1]:      # [1:] skip first card
+    a = card.locator("a[href]").first
+    title = a.inner_text()
+    company = card.locator("span").all_inner_texts() [0:1]
+    location = card.locator("span").all_inner_texts() [1:2]
+    url = a.evaluate("el => el.href")
+    jobPortal = "Työmarkkinatori"
+
+    jobs.append([title, company, location, url, jobPortal])
+  print(jobs)
+
+"""def upendCardsDataToExcel(cardsData):"""
 
