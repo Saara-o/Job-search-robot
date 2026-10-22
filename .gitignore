@@ -1,0 +1,22 @@
+# Robocorp / RPA output
+output/
+devdata/
+.robocorp/
+*.log
+
+# Secrets
+.env
+vault.json
+config.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
