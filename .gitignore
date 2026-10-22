@@ -1,22 +1,39 @@
-# Robocorp / RPA output
+# Robocorp / Sema4.ai output
 output/
+temp/
 devdata/
 .robocorp/
 *.log
 
-# Secrets
+# Salaisuudet – älä vie versionhallintaan
 .env
+env.json
 vault.json
 config.json
+devdata/env.json
 
 # Python
 __pycache__/
 *.pyc
-.venv/
 venv/
+.venv/
 
-# IDE / OS
+# Jupyter
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# Editori / agentit / käyttöjärjestelmä
 .vscode/
 .idea/
+.use
+.agent*
 .DS_Store
 Thumbs.db
+
+#cladesivut
+sivustot.py
+raportointi.py
+testitask.py
+kasittely.py
+hakuehdot.py
+README2.md

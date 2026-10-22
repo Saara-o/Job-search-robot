@@ -1,0 +1,16 @@
+{
+  "keywords": [
+    "ohjelmistokehittäjä",
+    "software developer",
+    "python",
+    "devops",
+    "data engineer",
+    "it-tuki"
+  ],
+  "location": ["Helsinki", "Espoo", "Vantaa"],
+  "job_type": "full-time",
+  "nayta_selain": false
+}
+  // Lisätään myöhemmin?
+  //"laheta_sahkoposti": false,
+  //"sahkoposti_vastaanottaja": "",
