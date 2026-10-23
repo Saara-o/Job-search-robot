@@ -1,11 +1,13 @@
 from robocorp import browser
+from RPA.Excel.Files import Files
 
 def getDataFromTyomarkkinatori():
   openTyomarkkinatori()
   blockCookies()
   makeSearch("python")
   selectLocation(["Helsinki", "Espoo"])
-  collectCardsData()
+  data = collectCardsData()
+  upendCardsDataToExcel(data)
 
 
 
@@ -29,6 +31,7 @@ def selectLocation(locationList):
   kentta = page.get_by_role("combobox", name="Sijainti")
 
   for location in locationList:
+    page.wait_for_timeout(1000)
     kentta.fill(location)
     kentta.press("Enter")
     kentta.fill("")
@@ -39,16 +42,32 @@ def collectCardsData():
   cards = page.locator("#tmt-haku-search-results-scroll-anchor > div").all()
 
   jobs = []
-  for card in cards[1:-1]:      # [1:] skip first card
+  for card in cards[1:-1]:
     a = card.locator("a[href]").first
     title = a.inner_text()
-    company = card.locator("span").all_inner_texts() [0:1]
-    location = card.locator("span").all_inner_texts() [1:2]
+    texts = card.locator("span").all_inner_texts()
+
+    title = a.inner_text()
+    company = texts[0]
+    location = texts[1]
     url = a.evaluate("el => el.href")
     jobPortal = "Työmarkkinatori"
 
     jobs.append([title, company, location, url, jobPortal])
   print(jobs)
+  return jobs
 
-"""def upendCardsDataToExcel(cardsData):"""
+def upendCardsDataToExcel(cardsData):
+  excel = Files()
+  excel.create_workbook("./output/Jobs.xlsx")
+
+  for row in cardsData:
+    emptyRow = excel.find_empty_row()
+    column = 1
+    for value in row:
+      excel.set_worksheet_value(emptyRow, column, value)
+      column += 1
+
+  excel.save_workbook()
+  excel.close_workbook()
 
