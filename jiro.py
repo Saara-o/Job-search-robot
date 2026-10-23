@@ -1,13 +1,26 @@
 from robocorp import browser
 from RPA.Excel.Files import Files
 
+import json
+
+with open("search_criteria.json", "r", encoding="utf-8") as f:
+    data = json.load(f)
+
+keywordlist = data["keywords"]
+locationslist = data["location"]
+
+
 def getDataFromTyomarkkinatori():
   openTyomarkkinatori()
   blockCookies()
-  makeSearch("python")
-  selectLocation(["Helsinki", "Espoo"])
-  data = collectCardsData()
-  upendCardsDataToExcel(data)
+  dataSet = []
+  for keyword in keywordlist:
+    makeSearch(keyword)
+    selectLocation(locationslist)
+    dataSet.append(collectCardsData())
+    openTyomarkkinatori()
+    
+  upendCardsDataToExcel(dataSet)
 
 
 
@@ -57,16 +70,17 @@ def collectCardsData():
   print(jobs)
   return jobs
 
-def upendCardsDataToExcel(cardsData):
+def upendCardsDataToExcel(dataSet):
   excel = Files()
   excel.create_workbook("./output/Jobs.xlsx")
 
-  for row in cardsData:
-    emptyRow = excel.find_empty_row()
-    column = 1
-    for value in row:
-      excel.set_worksheet_value(emptyRow, column, value)
-      column += 1
+  for oneKeyword in dataSet:
+    for workPlace in oneKeyword:
+      emptyRow = excel.find_empty_row()
+      column = 1
+      for value in workPlace:
+        excel.set_worksheet_value(emptyRow, column, value)
+        column += 1
 
   excel.save_workbook()
   excel.close_workbook()

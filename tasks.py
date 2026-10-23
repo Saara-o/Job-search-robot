@@ -9,7 +9,7 @@ def job_search_robot():
         config = json.load(f)
     print("Config loaded:", config)"""
 
-"""@task
+@task
 def jiro_test():
   slowmo=3000
-  getDataFromTyomarkkinatori()"""
+  getDataFromTyomarkkinatori()
