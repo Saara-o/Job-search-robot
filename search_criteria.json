@@ -12,5 +12,5 @@
   "nayta_selain": false,
   
   "laheta_sahkoposti": false,
-  "sahkoposti_vastaanottaja": ""
+  "email_recipient": ""
 }
