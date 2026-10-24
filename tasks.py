@@ -7,6 +7,7 @@ import os
 import json
 
 from jiro import getDataFromTyomarkkinatori
+from saara import getDataFromJobly, saveToExcel
 
 """@task
 def job_search_robot():
@@ -23,12 +24,16 @@ def jiro_test():
   recipient = getEmailRecipient()
   send_excel_by_email(recipient)"""
 
-
-
+"""@task
+def saara_test():
+    browser.configure(headless=False, slowmo = 500)
+    data = getDataFromJobly()
+    saveToExcel(data)
+"""
 
 
 ####################################################################
-
+"""
 def getEmailRecipient():
     with open("search_criteria.json", "r", encoding="utf-8") as f:
         data = json.load(f)
@@ -47,3 +52,4 @@ def send_excel_by_email(recipient, filename="./output/Jobs.xlsx"):
         body="Hei,\n\nliitteenä uusimmat työpaikat.",
         attachments=filename,
     )
+"""
