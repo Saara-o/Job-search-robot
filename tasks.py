@@ -24,11 +24,12 @@ def jiro_test():
   recipient = getEmailRecipient()
   send_excel_by_email(recipient)"""
 
-@task
+"""@task
 def saara_test():
     browser.configure(headless=False, slowmo = 500)
     data = getDataFromJobly()
     saveToExcel(data)
+"""
 
 
 ####################################################################
