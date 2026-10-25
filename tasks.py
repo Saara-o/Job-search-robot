@@ -32,6 +32,12 @@ def saara_test():
     saveToExcel(data)
 """
 
+@task
+def atte_test():
+    slowmo = 500
+    data = search_duunitori()
+    saveToExcel(data)
+
 
 ####################################################################
 """
