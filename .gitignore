@@ -29,11 +29,3 @@ venv/
 .agent*
 .DS_Store
 Thumbs.db
-
-#cladesivut
-sivustot.py
-raportointi.py
-testitask.py
-kasittely.py
-hakuehdot.py
-README2.md
