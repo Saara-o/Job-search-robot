@@ -8,6 +8,7 @@ import json
 
 from jiro import getDataFromTyomarkkinatori
 from saara import getDataFromJobly, saveToExcel
+from atte import search_duunitori, saveToExcel
 
 """@task
 def job_search_robot():
