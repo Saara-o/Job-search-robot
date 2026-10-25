@@ -64,7 +64,7 @@ def job_search_robot():
 
 
 def rows_to_dicts(data_set):
-    """Jiro and Saara return lists ->> dicts"""
+    """Työmarkkinatori and Jobly return lists ->> dicts"""
     jobs = []
     for search in data_set:
         for row in search:
