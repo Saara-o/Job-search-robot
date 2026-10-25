@@ -25,7 +25,9 @@ def openJobly(keyword, location):
         f"?search={quote_plus(keyword)}"
         f"&job_geo_location={quote_plus(location + ', Suomi')}"
     )
-    browser.goto(url)
+
+    page = browser.page()
+    page.goto(url, wait_until="domcontentloaded", timeout = 15000)
 
 """Clicks on cookie banner only necessary cookies"""
 def blockCookies():

@@ -18,15 +18,15 @@ from saara import getDataFromJobly
 from atte import load_criteria, search_duunitori
 
 OUTPUT_FILE = "output/Jobs.xlsx"
-COLUMNS = ["Title", "Company", "Location", "URL", "Job Portal"]
+COLUMNS = ["Title", "Company", "Location", "URL", "Job portal"]
 
 def rows_to_dicts(data_set):
     """Jiro and Saara return lists ->> dicts"""
     jobs = []
     for search in data_set:
         for row in search:
-            jobs.attend(dict(zip(COLUMNS, row)))
-        return jobs
+            jobs.append(dict(zip(COLUMNS, row)))
+    return jobs
 
 def remove_duplicates(jobs):
     """Remove duplicates by URL, and by title + company + location."""
@@ -54,21 +54,6 @@ def write_excel(jobs, path=OUTPUT_FILE):
     excel.close_workbook()
  
  
-def send_excel_by_email(recipient, summary, path=OUTPUT_FILE):
-    """Send the Excel file and the run summary to the user."""
-    mail = ImapSmtp(smtp_server="smtp.gmail.com", smtp_port=587)
-    mail.authorize_smtp(
-        account=os.environ["EMAIL_ACCOUNT"],
-        password=os.environ["EMAIL_PASSWORD"],
-    )
-    mail.send_message(
-        sender=os.environ["EMAIL_ACCOUNT"],
-        recipients=recipient,
-        subject="Job listings",
-        body=f"Hi,\n\nThe job listings file is attached.\n\n{summary}",
-        attachments=path,
-    )
-
 @task
 def job_search_robot():
     load_dotenv()
