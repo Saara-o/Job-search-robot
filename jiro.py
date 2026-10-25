@@ -21,8 +21,9 @@ def getDataFromTyomarkkinatori():
     selectLocation(locationslist)
     dataSet.append(collectCardsData())
     openTyomarkkinatori()
+  return dataSet
     
-  upendCardsDataToExcel(dataSet)
+  """upendCardsDataToExcel(dataSet)"""
 #######################################
 
 
@@ -77,7 +78,7 @@ def collectCardsData():
   print(jobs)
   return jobs
 
-# Create excel file and fill it with job posts information
+"""# Create excel file and fill it with job posts information
 def upendCardsDataToExcel(dataSet):
   excel = Files()
   excel.create_workbook("./output/Jobs.xlsx")
@@ -91,5 +92,5 @@ def upendCardsDataToExcel(dataSet):
         column += 1
 
   excel.save_workbook()
-  excel.close_workbook()
+  excel.close_workbook()"""
 
