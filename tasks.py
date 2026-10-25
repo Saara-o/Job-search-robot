@@ -1,6 +1,7 @@
 from robocorp.tasks import task
 from robocorp import browser
 
+
 from RPA.Email.ImapSmtp import ImapSmtp
 from dotenv import load_dotenv 
 import os
@@ -9,6 +10,19 @@ import json
 from jiro import getDataFromTyomarkkinatori
 from saara import getDataFromJobly, saveToExcel
 from atte import load_criteria, search_duunitori, write_excel
+
+@task
+def job_search_robot():
+    browser.configure(headless=False, slowmo = 500)
+    dataSet = []
+
+    getDataFromTyomarkkinatori()
+    dataSet.append(getDataFromJobly())
+    dataSet.append(search_duunitori())
+
+    saveToExcel()
+
+
 
 """@task
 def job_search_robot():
@@ -32,13 +46,13 @@ def saara_test():
     saveToExcel(data)
 """
 
-@task
+"""@task
 def atte_test():
     browser.configure(headless=False, slowmo = 500)
     criteria = load_criteria()
     data = search_duunitori(criteria)
     write_excel(data)
-
+"""
 
 ####################################################################
 """
