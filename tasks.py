@@ -13,9 +13,9 @@ except importError:
     def load_dotenv(*args, **kwargs):
         return False
 
-from jiro import getDataFromTyomarkkinatori
-from saara import getDataFromJobly
-from atte import load_criteria, search_duunitori
+from tyomarkkinatori import getDataFromTyomarkkinatori
+from jobly import getDataFromJobly
+from duunitori import load_criteria, search_duunitori
 
 OUTPUT_FILE = "output/Jobs.xlsx"
 COLUMNS = ["Title", "Company", "Location", "URL", "Job portal"]
