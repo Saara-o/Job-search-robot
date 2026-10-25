@@ -5,8 +5,7 @@
   ],
   "location": ["Helsinki", "Espoo", "Vantaa"],
   "job_type": "full-time",
-  "nayta_selain": false,
+
   
-  "laheta_sahkoposti": false,
-  "email_recipient": "atte.liikanen@student.laurea.fi"
+  "email_recipient": ""
 }
