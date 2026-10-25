@@ -86,14 +86,10 @@ def next_page_exists(page_number):
     return next_link.count() > 0
 
 
-def saveToExcel(dataSet, path="./output/Jobly.xlsx"):
-    rows = [job for search in dataSet for job in search]
-
+def write_excel(jobs, file_name="output/Duunitori.xlsx"):
+    """Save the jobs to Excel. The dictionary keys become the column titles."""
     excel = Files()
-    excel.create_workbook(path)
-    excel.append_rows_to_worksheet(
-        [["Title", "Company", "Location", "URL", "Job portal"]] + rows
-    )
-
+    excel.create_workbook(file_name, sheet_name=SITE)
+    excel.append_rows_to_worksheet(jobs, header=True)
     excel.save_workbook()
     excel.close_workbook()

@@ -8,7 +8,7 @@ import json
 
 from jiro import getDataFromTyomarkkinatori
 from saara import getDataFromJobly, saveToExcel
-from atte import search_duunitori, saveToExcel
+from atte import load_criteria, search_duunitori, write_excel
 
 """@task
 def job_search_robot():
@@ -35,8 +35,9 @@ def saara_test():
 @task
 def atte_test():
     browser.configure(headless=False, slowmo = 500)
-    data = search_duunitori()
-    saveToExcel(data)
+    criteria = load_criteria()
+    data = search_duunitori(criteria)
+    write_excel(data)
 
 
 ####################################################################
