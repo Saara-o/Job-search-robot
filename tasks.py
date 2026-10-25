@@ -34,7 +34,7 @@ def saara_test():
 
 @task
 def atte_test():
-    slowmo = 500
+    browser.configure(headless=False, slowmo = 500)
     data = search_duunitori()
     saveToExcel(data)
 
