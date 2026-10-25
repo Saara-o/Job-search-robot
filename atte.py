@@ -86,7 +86,7 @@ def next_page_exists(page_number):
     return next_link.count() > 0
 
 
-def saveToExcel(dataSet, path="./output/Jobly.xlsx"):
+def saveToExcel(dataSet, path="./output/Duunitori.xlsx"):
     rows = [job for search in dataSet for job in search]
 
     excel = Files()
