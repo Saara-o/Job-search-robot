@@ -86,7 +86,7 @@ def next_page_exists(page_number):
     return next_link.count() > 0
 
 
-def write_excel(jobs, file_name="output/Duunitori.xlsx"):
+#def write_excel(jobs, file_name="output/Duunitori.xlsx"):
     """Save the jobs to Excel. The dictionary keys become the column titles."""
     excel = Files()
     excel.create_workbook(file_name, sheet_name=SITE)
