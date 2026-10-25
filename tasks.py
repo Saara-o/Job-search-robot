@@ -93,36 +93,6 @@ def job_search_robot():
     write_excel(unique_jobs)
 
 
-"""@task
-def job_search_robot():
-    with open("config.json", encoding="utf-8") as f:
-        config = json.load(f)
-    print("Config loaded:", config)"""
-
-"""@task
-def jiro_test():
-  slowmo=3000
-  getDataFromTyomarkkinatori()
-
-  load_dotenv()
-  recipient = getEmailRecipient()
-  send_excel_by_email(recipient)"""
-
-"""@task
-def saara_test():
-    browser.configure(headless=False, slowmo = 500)
-    data = getDataFromJobly()
-    saveToExcel(data)
-"""
-
-"""@task
-def atte_test():
-    browser.configure(headless=False, slowmo = 500)
-    criteria = load_criteria()
-    data = search_duunitori(criteria)
-    write_excel(data)
-"""
-
 ####################################################################
 """
 def getEmailRecipient():
