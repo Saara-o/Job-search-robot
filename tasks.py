@@ -1,27 +1,111 @@
 from robocorp.tasks import task
 from robocorp import browser
+from RPA.Excel.Files import Files
 
 
 from RPA.Email.ImapSmtp import ImapSmtp
-from dotenv import load_dotenv 
 import os
 import json
 
+try:
+    from dotenv import load_dotenv
+except importError:
+    def load_dotenv(*args, **kwargs):
+        return False
+
 from jiro import getDataFromTyomarkkinatori
-from saara import getDataFromJobly, saveToExcel
-from atte import load_criteria, search_duunitori, write_excel
+from saara import getDataFromJobly
+from atte import load_criteria, search_duunitori
+
+OUTPUT_FILE = "output/Jobs.xlsx"
+COLUMNS = ["Title", "Company", "Location", "URL", "Job Portal"]
+
+def rows_to_dicts(data_set):
+    """Jiro and Saara return lists ->> dicts"""
+    jobs = []
+    for search in data_set:
+        for row in search:
+            jobs.attend(dict(zip(COLUMNS, row)))
+        return jobs
+
+def remove_duplicates(jobs):
+    """Remove duplicates by URL, and by title + company + location."""
+    seen_urls = set()
+    seen_keys = set()
+    unique = []
+    for job in jobs:
+        url = (job.get("URL") or "").split("?")[0].strip().lower()
+        key = tuple((job.get(c) or "").strip().lower() for c in ("Title", "Company", "Location"))
+        if (url and url in seen_urls) or key in seen_keys:
+            continue
+        seen_urls.add(url)
+        seen_keys.add(key)
+        unique.append(job)
+    return unique
+
+def write_excel(jobs, path=OUTPUT_FILE):
+    """Write all unique jobs to one Excel file."""
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    rows = [{c: job.get(c, "") for c in COLUMNS} for job in jobs]
+    excel = Files()
+    excel.create_workbook(path, sheet_name="Jobs")
+    excel.append_rows_to_worksheet(rows, header=True)
+    excel.save_workbook()
+    excel.close_workbook()
+ 
+ 
+def send_excel_by_email(recipient, summary, path=OUTPUT_FILE):
+    """Send the Excel file and the run summary to the user."""
+    mail = ImapSmtp(smtp_server="smtp.gmail.com", smtp_port=587)
+    mail.authorize_smtp(
+        account=os.environ["EMAIL_ACCOUNT"],
+        password=os.environ["EMAIL_PASSWORD"],
+    )
+    mail.send_message(
+        sender=os.environ["EMAIL_ACCOUNT"],
+        recipients=recipient,
+        subject="Job listings",
+        body=f"Hi,\n\nThe job listings file is attached.\n\n{summary}",
+        attachments=path,
+    )
 
 @task
 def job_search_robot():
+    load_dotenv()
+    criteria = load_criteria()
+
     browser.configure(headless=False, slowmo = 500)
-    dataSet = []
 
-    getDataFromTyomarkkinatori()
-    dataSet.append(getDataFromJobly())
-    dataSet.append(search_duunitori())
+    all_jobs = []
+    sites_ok = 0
+    failed_sites = []
 
-    saveToExcel()
+    sites = [
+        ("Työmarkkinatori", lambda: rows_to_dicts(getDataFromTyomarkkinatori())),
+        ("Jobly", lambda: rows_to_dicts(getDataFromJobly())),
+        ("Duunitori", lambda: search_duunitori(criteria)),
+    ]
+    
+    """One portal failing does not stop the others"""
+    for name, run in sites:
+        try:
+            jobs = run()
+            all_jobs.extend(jobs)
+            sites_ok += 1
+            print(f"{name}: {len(jobs)} listings collected")
+        except Exception as error:
+            failed_sites.append(name)
+            print(f"ERROR: {name} failed: {error}")
 
+
+    unique_jobs = remove_duplicates(all_jobs)
+    print(f"Total {len(all_jobs)} listings, {len(unique_jobs)} unique")
+
+    if not unique_jobs:
+        print("HELP NEEDED: no listings found from any site.")
+        return
+
+    write_excel(unique_jobs)
 
 
 """@task
