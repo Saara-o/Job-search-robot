@@ -59,7 +59,7 @@ def collectData():
     print(jobs)
     return jobs
 
-"""Save the data into excel file"""
+"""Save the data into excel file
 def saveToExcel(dataSet, path="./output/Jobly.xlsx"):
     rows = [job for search in dataSet for job in search]
 
@@ -71,3 +71,4 @@ def saveToExcel(dataSet, path="./output/Jobly.xlsx"):
 
     excel.save_workbook()
     excel.close_workbook()
+"""
