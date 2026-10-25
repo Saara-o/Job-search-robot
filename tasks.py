@@ -20,40 +20,7 @@ from duunitori import load_criteria, search_duunitori
 OUTPUT_FILE = "output/Jobs.xlsx"
 COLUMNS = ["Title", "Company", "Location", "URL", "Job portal"]
 
-def rows_to_dicts(data_set):
-    """Jiro and Saara return lists ->> dicts"""
-    jobs = []
-    for search in data_set:
-        for row in search:
-            jobs.append(dict(zip(COLUMNS, row)))
-    return jobs
-
-def remove_duplicates(jobs):
-    """Remove duplicates by URL, and by title + company + location."""
-    seen_urls = set()
-    seen_keys = set()
-    unique = []
-    for job in jobs:
-        url = (job.get("URL") or "").split("?")[0].strip().lower()
-        key = tuple((job.get(c) or "").strip().lower() for c in ("Title", "Company", "Location"))
-        if (url and url in seen_urls) or key in seen_keys:
-            continue
-        seen_urls.add(url)
-        seen_keys.add(key)
-        unique.append(job)
-    return unique
-
-def write_excel(jobs, path=OUTPUT_FILE):
-    """Write all unique jobs to one Excel file."""
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    rows = [{c: job.get(c, "") for c in COLUMNS} for job in jobs]
-    excel = Files()
-    excel.create_workbook(path, sheet_name="Jobs")
-    excel.append_rows_to_worksheet(rows, header=True)
-    excel.save_workbook()
-    excel.close_workbook()
- 
- 
+###############################################################################
 @task
 def job_search_robot():
     load_dotenv()
@@ -92,9 +59,43 @@ def job_search_robot():
 
     write_excel(unique_jobs)
 
+    send_excel_by_email(getEmailRecipient())
+###############################################################################
 
-####################################################################
-"""
+
+def rows_to_dicts(data_set):
+    """Jiro and Saara return lists ->> dicts"""
+    jobs = []
+    for search in data_set:
+        for row in search:
+            jobs.append(dict(zip(COLUMNS, row)))
+    return jobs
+
+def remove_duplicates(jobs):
+    """Remove duplicates by URL, and by title + company + location."""
+    seen_urls = set()
+    seen_keys = set()
+    unique = []
+    for job in jobs:
+        url = (job.get("URL") or "").split("?")[0].strip().lower()
+        key = tuple((job.get(c) or "").strip().lower() for c in ("Title", "Company", "Location"))
+        if (url and url in seen_urls) or key in seen_keys:
+            continue
+        seen_urls.add(url)
+        seen_keys.add(key)
+        unique.append(job)
+    return unique
+
+def write_excel(jobs, path=OUTPUT_FILE):
+    """Write all unique jobs to one Excel file."""
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    rows = [{c: job.get(c, "") for c in COLUMNS} for job in jobs]
+    excel = Files()
+    excel.create_workbook(path, sheet_name="Jobs")
+    excel.append_rows_to_worksheet(rows, header=True)
+    excel.save_workbook()
+    excel.close_workbook()
+
 def getEmailRecipient():
     with open("search_criteria.json", "r", encoding="utf-8") as f:
         data = json.load(f)
@@ -113,4 +114,3 @@ def send_excel_by_email(recipient, filename="./output/Jobs.xlsx"):
         body="Hei,\n\nliitteenä uusimmat työpaikat.",
         attachments=filename,
     )
-"""
