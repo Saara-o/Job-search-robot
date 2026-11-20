@@ -96,17 +96,9 @@ Dependencies (defined in `conda.yaml`):
 
 ## Running
 
-Run the robot with RCC:
-
-```bash
-rcc run
-```
-
-or, if the environment is already set up:
-
-```bash
-python -m robocorp.tasks run tasks.py
-```
+- Install [Sema4.ai SDK](https://marketplace.visualstudio.com/items?itemName=sema4ai.sema4ai) extension to your VSCode.  
+- Press Ctrl + Shift + P
+- Select Sema4.ai: Run Task Package
 
 During a run, the robot:
 
